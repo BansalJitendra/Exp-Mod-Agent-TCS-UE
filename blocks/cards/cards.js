@@ -1,8 +1,55 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
 import { moveInstrumentation } from '../../scripts/scripts.js';
 
+const CAROUSEL_GAP = 24;
+
+function getCardsPerView() {
+  return window.innerWidth >= 900 ? 3.15 : 1.15;
+}
+
+function buildCarouselNav(block, ul) {
+  const nav = document.createElement('div');
+  nav.className = 'cards-carousel-nav';
+
+  const prevBtn = document.createElement('button');
+  prevBtn.className = 'cards-carousel-prev';
+  prevBtn.setAttribute('aria-label', 'Previous slide');
+  prevBtn.innerHTML = '&#8592;';
+  prevBtn.disabled = true;
+
+  const nextBtn = document.createElement('button');
+  nextBtn.className = 'cards-carousel-next';
+  nextBtn.setAttribute('aria-label', 'Next slide');
+  nextBtn.innerHTML = '&#8594;';
+
+  nav.append(prevBtn, nextBtn);
+
+  const items = ul.querySelectorAll('li');
+  let currentIndex = 0;
+
+  const goToSlide = (index) => {
+    const perView = getCardsPerView();
+    const visibleCount = Math.floor(perView);
+    const containerWidth = block.offsetWidth;
+    const numGaps = Math.floor(perView);
+    const cardWidth = (containerWidth - numGaps * CAROUSEL_GAP) / perView;
+
+    items.forEach((li) => { li.style.width = `${cardWidth}px`; });
+
+    currentIndex = Math.max(0, Math.min(index, items.length - visibleCount));
+    ul.style.transform = `translateX(-${currentIndex * (cardWidth + CAROUSEL_GAP)}px)`;
+    prevBtn.disabled = currentIndex <= 0;
+    nextBtn.disabled = currentIndex >= items.length - visibleCount;
+  };
+
+  prevBtn.addEventListener('click', () => goToSlide(currentIndex - 1));
+  nextBtn.addEventListener('click', () => goToSlide(currentIndex + 1));
+
+  requestAnimationFrame(() => goToSlide(0));
+  return nav;
+}
+
 export default function decorate(block) {
-  /* change to ul, li */
   const ul = document.createElement('ul');
   [...block.children].forEach((row) => {
     const li = document.createElement('li');
@@ -19,6 +66,16 @@ export default function decorate(block) {
     moveInstrumentation(img, optimizedPic.querySelector('img'));
     img.closest('picture').replaceWith(optimizedPic);
   });
+
   block.textContent = '';
-  block.append(ul);
+
+  // Enable carousel mode for blocks with many cards
+  const items = ul.querySelectorAll('li');
+  if (items.length > 4) {
+    block.classList.add('carousel');
+    const nav = buildCarouselNav(block, ul);
+    block.append(nav, ul);
+  } else {
+    block.append(ul);
+  }
 }

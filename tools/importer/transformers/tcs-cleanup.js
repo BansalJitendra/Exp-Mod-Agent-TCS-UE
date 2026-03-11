@@ -39,7 +39,16 @@ export default function transform(hookName, element, payload) {
     dmContainers.forEach((dm) => {
       const hasVideo = dm.querySelector('video, .s7videoplayer, .s7videoviewer');
       if (hasVideo) {
-        // Video player — remove entirely
+        // Video player — extract poster image before removing
+        const assetPath = dm.getAttribute('data-asset-path');
+        const imageServer = dm.getAttribute('data-imageserver') || 'https://s7ap1.scene7.com/is/image/';
+        if (assetPath && dm.parentNode) {
+          const { document: doc } = payload;
+          const img = doc.createElement('img');
+          img.src = `${imageServer}${assetPath}?fit=constrain,1&wid=1920&hei=1080`;
+          img.alt = (dm.getAttribute('data-asset-name') || 'Video poster').replace(/\.\w+$/, '');
+          dm.parentNode.insertBefore(img, dm);
+        }
         dm.remove();
       } else {
         // Static image container — promote the img to parent, then remove wrapper

@@ -42,24 +42,49 @@ var CustomImportScript = (() => {
 
   // tools/importer/parsers/hero.js
   function parse(element, { document }) {
-    const heroImage = element.querySelector(
-      ".hero-banner-box img, .hero-video-container img, .hero-banner-container img"
-    );
-    const visibleText = element.querySelector(".hero-banner-content-div span.visually-hidden");
+    const scene7El = element.querySelector("[data-asset-path]");
+    let posterSrc = null;
+    let posterAlt = "TCS Hero Banner";
+    if (scene7El) {
+      const assetPath = scene7El.getAttribute("data-asset-path");
+      const imageServer = scene7El.getAttribute("data-imageserver") || "https://s7ap1.scene7.com/is/image/";
+      if (assetPath) {
+        posterSrc = `${imageServer}${assetPath}?fit=constrain,1&wid=1920&hei=1080`;
+      }
+    }
+    if (!posterSrc) {
+      const heroImage = element.querySelector(
+        ".hero-banner-box img, .hero-video-container img, .hero-banner-container img"
+      );
+      if (heroImage) {
+        posterSrc = heroImage.src;
+        posterAlt = heroImage.alt || posterAlt;
+      }
+    }
     const ctaLink = element.querySelector(
       "a.new-hero-banner, a.tcs-primary-btn, .hero-banner-content-div a"
     );
     const imageFrag = document.createDocumentFragment();
     imageFrag.appendChild(document.createComment(" field:image "));
-    if (heroImage) {
-      imageFrag.appendChild(heroImage);
+    if (posterSrc) {
+      const img = document.createElement("img");
+      img.src = posterSrc;
+      img.alt = posterAlt;
+      const p = document.createElement("p");
+      p.appendChild(img);
+      imageFrag.appendChild(p);
     }
     const textFrag = document.createDocumentFragment();
     textFrag.appendChild(document.createComment(" field:text "));
-    if (visibleText && visibleText.textContent.trim()) {
-      const p = document.createElement("p");
-      p.textContent = visibleText.textContent.trim();
-      textFrag.appendChild(p);
+    const visibleText = element.querySelector(".hero-banner-content-div span.visually-hidden");
+    if (visibleText) {
+      const fullText = visibleText.textContent.trim();
+      const match = fullText.match(/The Perpetually Adaptive Enterprise/i);
+      if (match) {
+        const tagline = document.createElement("p");
+        tagline.textContent = "The Perpetually Adaptive Enterprise";
+        textFrag.appendChild(tagline);
+      }
     }
     if (ctaLink) {
       const hiddenSpans = ctaLink.querySelectorAll(".visually-hidden");
@@ -266,6 +291,15 @@ var CustomImportScript = (() => {
       dmContainers.forEach((dm) => {
         const hasVideo = dm.querySelector("video, .s7videoplayer, .s7videoviewer");
         if (hasVideo) {
+          const assetPath = dm.getAttribute("data-asset-path");
+          const imageServer = dm.getAttribute("data-imageserver") || "https://s7ap1.scene7.com/is/image/";
+          if (assetPath && dm.parentNode) {
+            const { document: doc } = payload;
+            const img = doc.createElement("img");
+            img.src = `${imageServer}${assetPath}?fit=constrain,1&wid=1920&hei=1080`;
+            img.alt = (dm.getAttribute("data-asset-name") || "Video poster").replace(/\.\w+$/, "");
+            dm.parentNode.insertBefore(img, dm);
+          }
           dm.remove();
         } else {
           const img = dm.querySelector("img.fluidimage, img.dynamic-media-image");
