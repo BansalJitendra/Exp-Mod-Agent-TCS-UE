@@ -1,10 +1,12 @@
 .columns > div {
   display: flex;
   flex-direction: column;
+  gap: 24px;
 }
 
 .columns img {
   width: 100%;
+  border-radius: 8px;
 }
 
 .columns > div > div {
@@ -19,15 +21,118 @@
   display: block;
 }
 
+/* Three-column hub panel pattern */
+.columns > div > div h3 {
+  font-size: 20px;
+  margin-top: 12px;
+  margin-bottom: 8px;
+}
+
+.columns > div > div p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #555;
+}
+
+.columns > div > div a {
+  font-weight: 500;
+}
+
+/* Dark section — hub panel with image cards */
+.dark .columns > div {
+  gap: 16px;
+}
+
+.dark .columns > div > div {
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  padding: 0;
+}
+
+.dark .columns > div > div p:first-child {
+  margin: 0;
+  line-height: 0;
+}
+
+.dark .columns > div > div img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+  border-radius: 12px;
+}
+
+.dark .columns > div > div h3 {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 16px;
+}
+
+.dark .columns > div > div p {
+  color: #b0b0b0;
+  font-size: 14px;
+}
+
+.dark .columns > div > div p:last-child a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255 255 255 / 30%);
+  color: #fff;
+  text-decoration: none;
+  font-size: 0;
+  margin-top: 8px;
+}
+
+.dark .columns > div > div p:last-child a::after {
+  content: '\2192';
+  font-size: 18px;
+}
+
+/* Two-column text+image layout (Careers section) */
 @media (width >= 900px) {
   .columns > div {
     align-items: center;
     flex-direction: unset;
-    gap: 24px;
+    gap: 48px;
   }
 
   .columns > div > div {
     flex: 1;
     order: unset;
+  }
+
+  .columns > div > div h2 {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-weight: 400;
+    margin-top: 0;
+  }
+
+  .columns > div > div h3 {
+    font-size: 32px;
+    font-weight: 600;
+    margin-top: 0;
+  }
+
+  /* Dark hub panel — 3 equal columns */
+  .dark .columns > div {
+    gap: 24px;
+  }
+
+  .dark .columns > div > div {
+    flex: 1;
+  }
+
+  .dark .columns > div > div h3 {
+    font-size: 22px;
+    color: #fff;
   }
 }

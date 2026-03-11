@@ -1,0 +1,17 @@
+{
+  "status": "success",
+  "url": "https://www.tcs.com/",
+  "path": "index",
+  "timestamp": "2026-03-11T12:56:58.682Z",
+  "title": "Tata Consultancy Services: Building Perpetually Adaptive Enterprises",
+  "template": "tcs-homepage",
+  "blocks": [
+    "hero",
+    "cards",
+    "cards",
+    "cards",
+    "cards",
+    "columns",
+    "columns"
+  ]
+}

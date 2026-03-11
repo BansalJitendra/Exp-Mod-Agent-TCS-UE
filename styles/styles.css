@@ -11,14 +11,18 @@
  */
 
 :root {
-  /* colors */
-  --background-color: white;
-  --light-color: #f8f8f8;
-  --dark-color: #505050;
-  --text-color: #131313;
-  --link-color: #3b63fb;
-  --link-hover-color: #1d3ecf;
-  --overlay-background-color:lightgrey;
+  /* colors — TCS brand */
+  --background-color: #fff;
+  --light-color: #f5f5f5;
+  --dark-color: #1a1a2e;
+  --text-color: #2d2d2d;
+  --link-color: #0056b3;
+  --link-hover-color: #003d80;
+  --overlay-background-color: #e8e8e8;
+  --heading-color: #1a1a2e;
+  --accent-color: #0056b3;
+  --card-border-color: #e0e0e0;
+  --section-bg-alt: #f7f7f7;
 
   /* fonts */
   --body-font-family: roboto, roboto-fallback, sans-serif;
@@ -119,6 +123,7 @@ h6 {
   font-weight: 600;
   line-height: 1.25;
   scroll-margin: 40px;
+  color: var(--heading-color);
 }
 
 h1 { font-size: var(--heading-font-size-xxl); }
@@ -238,7 +243,8 @@ main img {
 
 /* sections */
 main > .section {
-  margin: 40px 0;
+  margin: 0;
+  padding: 60px 0;
 }
 
 main > .section > div {
@@ -249,6 +255,7 @@ main > .section > div {
 
 main > .section:first-of-type {
   margin-top: 0;
+  padding-top: 0;
 }
 
 @media (width >= 900px) {
@@ -263,4 +270,123 @@ main .section.highlight {
   background-color: var(--light-color);
   margin: 0;
   padding: 40px 0;
+}
+
+main .section.dark {
+  background-color: var(--dark-color);
+  color: #fff;
+  margin: 0;
+  padding: 60px 0;
+}
+
+main .section.dark h2 {
+  color: #fff;
+}
+
+main .section.dark a:any-link {
+  color: #7eb8ff;
+}
+
+main .section.dark a:hover {
+  color: #b3d4ff;
+}
+
+/* hide skip-to links */
+main > .section:first-of-type > div > p:first-child {
+  display: none;
+}
+
+main > .section:first-of-type > div > p:nth-child(2) {
+  display: none;
+}
+
+/* Careers section — second-to-last content section before contact */
+main > .section.columns-container:last-of-type {
+  background-color: #0d1b3e;
+  color: #fff;
+  padding: 60px 0;
+}
+
+main > .section.columns-container:last-of-type h2 {
+  color: #fff;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: 400;
+}
+
+main > .section.columns-container:last-of-type h3 {
+  color: #fff;
+  font-size: 32px;
+  font-weight: 600;
+  font-style: italic;
+}
+
+main > .section.columns-container:last-of-type p {
+  color: #ccc;
+  line-height: 1.7;
+}
+
+main > .section.columns-container:last-of-type a.button:any-link {
+  background-color: #fff;
+  color: #0d1b3e;
+  border-radius: 4px;
+  padding: 12px 32px;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+main > .section.columns-container:last-of-type a.button:hover {
+  background-color: #e0e0e0;
+}
+
+/* Contact CTA section — last content section */
+main > .section:last-of-type:not(.columns-container):not(.cards-container) {
+  background-color: var(--dark-color);
+  color: #fff;
+  text-align: center;
+  padding: 80px 0;
+}
+
+main > .section:last-of-type:not(.columns-container):not(.cards-container) h2 {
+  color: #fff;
+  font-size: 36px;
+  margin-bottom: 16px;
+}
+
+main > .section:last-of-type:not(.columns-container):not(.cards-container) p {
+  color: #ccc;
+  font-size: 18px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+main > .section:last-of-type:not(.columns-container):not(.cards-container) a.button:any-link {
+  background-color: #fff;
+  color: var(--dark-color);
+  border-radius: 4px;
+  padding: 14px 40px;
+  font-weight: 600;
+  font-size: 16px;
+  margin-top: 24px;
+}
+
+main > .section:last-of-type:not(.columns-container):not(.cards-container) a.button:hover {
+  background-color: #e0e0e0;
+}
+
+/* Cards section — style standalone <p> heading (e.g. "Meet us here") */
+main > .section.cards-container:not(:has(h2)) > .default-content-wrapper > p {
+  font-family: var(--heading-font-family);
+  font-size: var(--heading-font-size-l);
+  font-weight: 600;
+  color: var(--heading-color);
+  line-height: 1.25;
+  margin-bottom: 24px;
+}
+
+/* Alternate section backgrounds for visual rhythm */
+main > .section:nth-of-type(even):not(.dark):not(.light):not(:last-of-type) {
+  background-color: var(--section-bg-alt);
 }

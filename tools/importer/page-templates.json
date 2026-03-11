@@ -1,0 +1,128 @@
+{
+  "templates": [
+    {
+      "name": "tcs-homepage",
+      "urls": [
+        "https://www.tcs.com/"
+      ],
+      "description": "TCS corporate homepage with hero banner, news carousel, solutions, customer stories, events, insights, careers, and contact CTA",
+      "blocks": [
+        {
+          "name": "hero",
+          "instances": [
+            ".heroBanner"
+          ]
+        },
+        {
+          "name": "cards",
+          "instances": [
+            ".storyCardCarousel",
+            ".solutionCard",
+            ".horizontalAccordion",
+            ".featureCard"
+          ]
+        },
+        {
+          "name": "columns",
+          "instances": [
+            ".interactiveHubPannel",
+            ".textWithAsset"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "section-1",
+          "name": "Hero Banner",
+          "selector": ".heroBanner",
+          "style": null,
+          "blocks": [
+            "hero"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "section-2",
+          "name": "What's New",
+          "selector": ".storyCardCarousel",
+          "style": null,
+          "blocks": [
+            "cards"
+          ],
+          "defaultContent": [
+            "h2"
+          ]
+        },
+        {
+          "id": "section-3",
+          "name": "Cutting Edge Solutions",
+          "selector": ".interactiveHubPannel",
+          "style": "dark",
+          "blocks": [
+            "columns"
+          ],
+          "defaultContent": [
+            "h2"
+          ]
+        },
+        {
+          "id": "section-4",
+          "name": "Customer Stories",
+          "selector": ".solutionCard",
+          "style": null,
+          "blocks": [
+            "cards"
+          ],
+          "defaultContent": [
+            "h2"
+          ]
+        },
+        {
+          "id": "section-5",
+          "name": "Meet Us Here",
+          "selector": ".horizontalAccordion",
+          "style": null,
+          "blocks": [
+            "cards"
+          ],
+          "defaultContent": [
+            "h2"
+          ]
+        },
+        {
+          "id": "section-6",
+          "name": "News and Insights",
+          "selector": ".featureCard",
+          "style": null,
+          "blocks": [
+            "cards"
+          ],
+          "defaultContent": [
+            "h2"
+          ]
+        },
+        {
+          "id": "section-7",
+          "name": "Careers",
+          "selector": ".textWithAsset",
+          "style": null,
+          "blocks": [
+            "columns"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "section-8",
+          "name": "Contact CTA",
+          "selector": ".footerFlyout",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "p",
+            "a"
+          ]
+        }
+      ]
+    }
+  ]
+}
