@@ -56,15 +56,31 @@ export default function decorate(block) {
     moveInstrumentation(row, li);
     while (row.firstElementChild) li.append(row.firstElementChild);
     [...li.children].forEach((div) => {
-      if (div.children.length === 1 && div.querySelector('picture')) div.className = 'cards-card-image';
-      else div.className = 'cards-card-body';
+      if (div.children.length === 1 && (div.querySelector('picture') || div.querySelector('img'))) {
+        div.className = 'cards-card-image';
+      } else div.className = 'cards-card-body';
     });
     ul.append(li);
   });
-  ul.querySelectorAll('picture > img').forEach((img) => {
-    const optimizedPic = createOptimizedPicture(img.src, img.alt, false, [{ width: '750' }]);
-    moveInstrumentation(img, optimizedPic.querySelector('img'));
-    img.closest('picture').replaceWith(optimizedPic);
+  ul.querySelectorAll('.cards-card-image img').forEach((img) => {
+    const imgUrl = new URL(img.src, window.location.href);
+    const isExternal = img.src && imgUrl.origin !== window.location.origin;
+    const pic = img.closest('picture');
+    if (isExternal && !pic) {
+      // Wrap external images in <picture> without rewriting the URL
+      const picture = document.createElement('picture');
+      const newImg = document.createElement('img');
+      newImg.src = img.src;
+      newImg.alt = img.alt || '';
+      newImg.loading = 'lazy';
+      picture.appendChild(newImg);
+      moveInstrumentation(img, newImg);
+      (img.closest('p') || img).replaceWith(picture);
+    } else if (!isExternal) {
+      const optimizedPic = createOptimizedPicture(img.src, img.alt, false, [{ width: '750' }]);
+      moveInstrumentation(img, optimizedPic.querySelector('img'));
+      (pic || img.closest('p') || img).replaceWith(optimizedPic);
+    }
   });
 
   block.textContent = '';

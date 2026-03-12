@@ -1,5 +1,9 @@
 {
   "type": "xwalk",
   "contentHostUrl": "author-p121857-e1908603.adobeaemcloud.com",
-  "libraryUrl": "https://main--exp-mod-agent-tcs-ue--bansaljitendra.aem.page/tools/sidekick/library.json"
+  "libraryUrl": "https://main--exp-mod-agent-tcs-ue--bansaljitendra.aem.page/tools/sidekick/library.json",
+  "aemSitePath": "/content/tcs-ema-ue-site",
+  "aemAssetsFolderPath": "/content/dam/tcs-ema-ue-site",
+  "aemSiteName": "tcs-ema-ue-site",
+  "aemSiteTitle": "TCS EMA UE Site"
 }
