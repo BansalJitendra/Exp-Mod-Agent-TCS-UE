@@ -89,6 +89,8 @@ export default function decorate(block) {
   const items = ul.querySelectorAll('li');
   if (items.length > 4) {
     block.classList.add('carousel');
+    // Carousel overflow:hidden prevents lazy loading for off-screen slides
+    ul.querySelectorAll('img').forEach((img) => { img.loading = 'eager'; });
     const nav = buildCarouselNav(block, ul);
     block.append(nav, ul);
   } else {
