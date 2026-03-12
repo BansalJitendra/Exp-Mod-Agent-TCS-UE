@@ -106,22 +106,45 @@ var CustomImportScript = (() => {
   }
 
   // tools/importer/parsers/cards.js
-  function parse2(element, { document }) {
+  function parse2(element, { document }, options = {}) {
+    const blockName = options.blockName || "cards";
     const cardItems = element.querySelectorAll(
       ".swiper-slide.story-card-swiper-slide, .swiper-slide.solution-card-swiper-slide, .accordion-item, a.feature-card-swiper-slide"
     );
     const cells = [];
     cardItems.forEach((item) => {
-      const img = item.querySelector(
+      let img = item.querySelector(
         "img.story-card-image, img.solution-card-img, img.dynamic-media-image, img.accordion-img, img.card-img-top, .story-image-section img, .card-image-container img"
       );
-      const imageFrag = document.createDocumentFragment();
-      imageFrag.appendChild(document.createComment(" field:image "));
-      if (img) {
-        imageFrag.appendChild(img);
+      if (!img) {
+        img = item.querySelector("img");
       }
-      const textFrag = document.createDocumentFragment();
-      textFrag.appendChild(document.createComment(" field:text "));
+      let imgSrc = "";
+      let imgAlt = "";
+      if (img) {
+        imgSrc = img.src;
+        imgAlt = img.alt || "";
+      } else {
+        const dm = item.querySelector('.s7dm-dynamic-media[data-asset-type="image"]');
+        if (dm) {
+          const server = dm.getAttribute("data-imageserver") || "";
+          const assetPath = dm.getAttribute("data-asset-path") || "";
+          if (server && assetPath) {
+            imgSrc = server + assetPath;
+          }
+          imgAlt = dm.getAttribute("data-alt") || "";
+        }
+      }
+      const imageCell = document.createDocumentFragment();
+      if (imgSrc) {
+        const p = document.createElement("p");
+        const newImg = document.createElement("img");
+        newImg.src = imgSrc;
+        newImg.alt = imgAlt;
+        p.appendChild(newImg);
+        imageCell.appendChild(p);
+      }
+      const textCell = document.createDocumentFragment();
       const title = item.querySelector(
         ".story-card-title, h3.solution-card-inner-heading-text, h3.accordion-title, h3.card-title"
       );
@@ -130,7 +153,7 @@ var CustomImportScript = (() => {
         const strong = document.createElement("strong");
         strong.textContent = title.textContent.trim();
         p.appendChild(strong);
-        textFrag.appendChild(p);
+        textCell.appendChild(p);
       }
       const desc = item.querySelector(
         ".story-card-description, .solution-card-inner-description, .horizontal-accordion-title-content, .card-text"
@@ -138,7 +161,7 @@ var CustomImportScript = (() => {
       if (desc) {
         const p = document.createElement("p");
         p.textContent = desc.textContent.trim();
-        textFrag.appendChild(p);
+        textCell.appendChild(p);
       }
       let ctaLink = item.querySelector(
         'a.story-cta-link, a[class*="know-more"], .description-content a'
@@ -162,11 +185,14 @@ var CustomImportScript = (() => {
         hiddenSpans.forEach((s) => s.remove());
         const p = document.createElement("p");
         p.appendChild(ctaLink);
-        textFrag.appendChild(p);
+        textCell.appendChild(p);
       }
-      cells.push(["card", imageFrag, textFrag]);
+      cells.push([imageCell, textCell]);
     });
-    const block = WebImporter.Blocks.createBlock(document, { name: "cards", cells });
+    const block = WebImporter.Blocks.createBlock(document, {
+      name: blockName,
+      cells
+    });
     const heading = element.querySelector("h2, .section-tile");
     if (heading) {
       element.before(heading);
@@ -428,7 +454,12 @@ var CustomImportScript = (() => {
       },
       {
         name: "cards",
-        instances: [".storyCardCarousel", ".solutionCard", ".horizontalAccordion", ".featureCard"]
+        variant: "carousel",
+        instances: [".storyCardCarousel", ".solutionCard", ".horizontalAccordion"]
+      },
+      {
+        name: "cards",
+        instances: [".featureCard"]
       },
       {
         name: "columns",
@@ -529,6 +560,7 @@ var CustomImportScript = (() => {
         elements.forEach((element) => {
           pageBlocks.push({
             name: blockDef.name,
+            variant: blockDef.variant || null,
             selector,
             element,
             section: blockDef.section || null
@@ -549,7 +581,11 @@ var CustomImportScript = (() => {
         const parser = parsers[block.name];
         if (parser) {
           try {
-            parser(block.element, { document, url, params });
+            const options = {};
+            if (block.variant) {
+              options.blockName = `${block.name} (${block.variant})`;
+            }
+            parser(block.element, { document, url, params }, options);
           } catch (e) {
             console.error(`Failed to parse ${block.name} (${block.selector}):`, e);
           }

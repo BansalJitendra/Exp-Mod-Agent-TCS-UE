@@ -31,7 +31,12 @@ const PAGE_TEMPLATE = {
     },
     {
       name: 'cards',
-      instances: ['.storyCardCarousel', '.solutionCard', '.horizontalAccordion', '.featureCard']
+      variant: 'carousel',
+      instances: ['.storyCardCarousel', '.solutionCard', '.horizontalAccordion']
+    },
+    {
+      name: 'cards',
+      instances: ['.featureCard']
     },
     {
       name: 'columns',
@@ -152,6 +157,7 @@ function findBlocksOnPage(document, template) {
       elements.forEach((element) => {
         pageBlocks.push({
           name: blockDef.name,
+          variant: blockDef.variant || null,
           selector,
           element,
           section: blockDef.section || null,
@@ -182,7 +188,11 @@ export default {
       const parser = parsers[block.name];
       if (parser) {
         try {
-          parser(block.element, { document, url, params });
+          const options = {};
+          if (block.variant) {
+            options.blockName = `${block.name} (${block.variant})`;
+          }
+          parser(block.element, { document, url, params }, options);
         } catch (e) {
           console.error(`Failed to parse ${block.name} (${block.selector}):`, e);
         }

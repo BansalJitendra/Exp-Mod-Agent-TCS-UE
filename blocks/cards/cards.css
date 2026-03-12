@@ -22,13 +22,8 @@
   transform: translateY(-2px);
 }
 
-/* Hide the block type indicator cell ("card") */
-.cards > ul > li > div:first-child {
-  display: none;
-}
-
 /* Image cell */
-.cards > ul > li > div:nth-child(2) {
+.cards > ul > li .cards-card-image {
   line-height: 0;
   overflow: hidden;
 }
@@ -45,35 +40,35 @@
 }
 
 /* Text cell */
-.cards > ul > li > div:last-child {
+.cards > ul > li .cards-card-body {
   padding: 16px 20px 20px;
 }
 
-.cards > ul > li > div:last-child p {
+.cards > ul > li .cards-card-body p {
   margin: 0 0 8px;
   font-size: 14px;
   line-height: 1.5;
   color: #555;
 }
 
-.cards > ul > li > div:last-child p:first-child {
+.cards > ul > li .cards-card-body p:first-child {
   font-size: 16px;
   color: var(--heading-color, #1a1a2e);
   margin-bottom: 8px;
 }
 
-.cards > ul > li > div:last-child p strong {
+.cards > ul > li .cards-card-body p strong {
   font-weight: 600;
 }
 
 /* CTA links — override default button style, show as text link with arrow */
-.cards > ul > li > div:last-child .button-container {
+.cards > ul > li .cards-card-body .button-container {
   margin-top: 12px;
   border-top: 1px solid #e0e0e0;
   padding-top: 12px;
 }
 
-.cards > ul > li > div:last-child a.button:any-link {
+.cards > ul > li .cards-card-body a.button:any-link {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -88,14 +83,14 @@
   white-space: normal;
 }
 
-.cards > ul > li > div:last-child a.button::after {
+.cards > ul > li .cards-card-body a.button::after {
   content: '\2192';
   font-size: 18px;
   margin-left: 12px;
   flex-shrink: 0;
 }
 
-.cards > ul > li > div:last-child a.button:hover {
+.cards > ul > li .cards-card-body a.button:hover {
   background: none;
   color: var(--link-color);
   text-decoration: none;
@@ -184,7 +179,7 @@
 }
 
 /* Carousel card image — rounded corners */
-.cards.carousel > ul > li > div:nth-child(2) {
+.cards.carousel > ul > li .cards-card-image {
   border-radius: 12px;
   overflow: hidden;
 }
@@ -195,17 +190,17 @@
 }
 
 /* Carousel card text */
-.cards.carousel > ul > li > div:last-child {
+.cards.carousel > ul > li .cards-card-body {
   padding: 16px 0 0;
 }
 
-.cards.carousel > ul > li > div:last-child p {
+.cards.carousel > ul > li .cards-card-body p {
   font-size: 16px;
   color: #555;
   line-height: 1.6;
 }
 
-.cards.carousel > ul > li > div:last-child p:first-child {
+.cards.carousel > ul > li .cards-card-body p:first-child {
   font-size: 24px;
   font-weight: 600;
   font-family: var(--heading-font-family);
@@ -215,13 +210,13 @@
 }
 
 /* Carousel CTA */
-.cards.carousel > ul > li > div:last-child .button-container {
+.cards.carousel > ul > li .cards-card-body .button-container {
   margin-top: 16px;
   border-top: 1px solid #e0e0e0;
   padding-top: 12px;
 }
 
-.cards.carousel > ul > li > div:last-child a.button:any-link {
+.cards.carousel > ul > li .cards-card-body a.button:any-link {
   font-size: 15px;
   font-weight: 600;
 }

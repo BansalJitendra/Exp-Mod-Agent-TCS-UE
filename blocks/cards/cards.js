@@ -55,35 +55,20 @@ export default function decorate(block) {
     moveInstrumentation(row, li);
     while (row.firstElementChild) li.append(row.firstElementChild);
     [...li.children].forEach((div) => {
-      if (div.children.length === 1 && (div.querySelector('picture') || div.querySelector('img'))) {
+      if (div.children.length === 1
+        && (div.querySelector('picture') || div.querySelector('img'))) {
         div.className = 'cards-card-image';
-      } else div.className = 'cards-card-body';
+      } else {
+        div.className = 'cards-card-body';
+      }
     });
     ul.append(li);
-  });
-  ul.querySelectorAll('.cards-card-image img').forEach((img) => {
-    if (!img.closest('picture')) {
-      // Wrap bare <img> in <picture> without rewriting the src URL.
-      // Preserves the exact path so images resolve correctly in both
-      // local preview and AEM Universal Editor.
-      const picture = document.createElement('picture');
-      const newImg = document.createElement('img');
-      newImg.src = img.src;
-      newImg.alt = img.alt || '';
-      newImg.loading = 'lazy';
-      picture.appendChild(newImg);
-      moveInstrumentation(img, newImg);
-      (img.closest('p') || img).replaceWith(picture);
-    }
   });
 
   block.textContent = '';
 
-  // Enable carousel mode for blocks with many cards
-  const items = ul.querySelectorAll('li');
-  if (items.length > 4) {
-    block.classList.add('carousel');
-    // Carousel overflow:hidden prevents lazy loading for off-screen slides
+  // Carousel variant: class added by AEM from block name "cards (carousel)"
+  if (block.classList.contains('carousel')) {
     ul.querySelectorAll('img').forEach((img) => { img.loading = 'eager'; });
     const nav = buildCarouselNav(block, ul);
     block.append(nav, ul);
