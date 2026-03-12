@@ -2,10 +2,6 @@ import { moveInstrumentation } from '../../scripts/scripts.js';
 
 const CAROUSEL_GAP = 24;
 
-function getCardsPerView() {
-  return window.innerWidth >= 900 ? 3.15 : 1.15;
-}
-
 function buildCarouselNav(block, ul) {
   const nav = document.createElement('div');
   nav.className = 'cards-carousel-nav';
@@ -27,9 +23,11 @@ function buildCarouselNav(block, ul) {
   let currentIndex = 0;
 
   const goToSlide = (index) => {
-    const perView = getCardsPerView();
-    const visibleCount = Math.floor(perView);
     const containerWidth = block.offsetWidth;
+    if (containerWidth <= 0) return;
+
+    const perView = containerWidth >= 900 ? 3.15 : 1.15;
+    const visibleCount = Math.floor(perView);
     const numGaps = Math.floor(perView);
     const cardWidth = (containerWidth - numGaps * CAROUSEL_GAP) / perView;
 
@@ -44,7 +42,12 @@ function buildCarouselNav(block, ul) {
   prevBtn.addEventListener('click', () => goToSlide(currentIndex - 1));
   nextBtn.addEventListener('click', () => goToSlide(currentIndex + 1));
 
-  requestAnimationFrame(() => goToSlide(0));
+  // Use ResizeObserver to initialize and re-layout when block becomes visible
+  // or resizes. This handles AEM UE where the section starts hidden (display:none)
+  // and block.offsetWidth is 0 during initial decoration.
+  const observer = new ResizeObserver(() => goToSlide(currentIndex));
+  observer.observe(block);
+
   return nav;
 }
 
