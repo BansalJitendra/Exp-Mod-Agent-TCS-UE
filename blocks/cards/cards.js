@@ -1,4 +1,3 @@
-import { createOptimizedPicture } from '../../scripts/aem.js';
 import { moveInstrumentation } from '../../scripts/scripts.js';
 
 const CAROUSEL_GAP = 24;
@@ -63,11 +62,10 @@ export default function decorate(block) {
     ul.append(li);
   });
   ul.querySelectorAll('.cards-card-image img').forEach((img) => {
-    const imgUrl = new URL(img.src, window.location.href);
-    const isExternal = img.src && imgUrl.origin !== window.location.origin;
-    const pic = img.closest('picture');
-    if (isExternal && !pic) {
-      // Wrap external images in <picture> without rewriting the URL
+    if (!img.closest('picture')) {
+      // Wrap bare <img> in <picture> without rewriting the src URL.
+      // Preserves the exact path so images resolve correctly in both
+      // local preview and AEM Universal Editor.
       const picture = document.createElement('picture');
       const newImg = document.createElement('img');
       newImg.src = img.src;
@@ -76,10 +74,6 @@ export default function decorate(block) {
       picture.appendChild(newImg);
       moveInstrumentation(img, newImg);
       (img.closest('p') || img).replaceWith(picture);
-    } else if (!isExternal) {
-      const optimizedPic = createOptimizedPicture(img.src, img.alt, false, [{ width: '750' }]);
-      moveInstrumentation(img, optimizedPic.querySelector('img'));
-      (pic || img.closest('p') || img).replaceWith(optimizedPic);
     }
   });
 
